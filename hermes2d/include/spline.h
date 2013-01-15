@@ -34,9 +34,10 @@ namespace Hermes
       CubicSpline(double const_value);
 
       /// Destructor.
-      ~CubicSpline() {
-        if(coeffs != NULL)
-          delete [] coeffs;
+      virtual ~CubicSpline()
+      {
+        coeffs.clear();
+
         points.clear();
         values.clear();
       };
@@ -48,13 +49,13 @@ namespace Hermes
       double value(double x) const;
 
       /// One-dimensional function integration order.
-      Hermes::Ord value(Hermes::Ord x) const {return Hermes::Ord(3);};
+      Hermes::Ord value(Hermes::Ord x) const { return Hermes::Ord(3); }
 
       /// One-dimensional function derivative value.
       double derivative(double x) const;
 
       /// One-dimensional function derivative integration order.
-      Hermes::Ord derivative(Hermes::Ord x) const {return Hermes::Ord(2);};
+      Hermes::Ord derivative(Hermes::Ord x) const { return Hermes::Ord(2); }
 
       /// Plots the spline in format for Pylab (just pairs
       /// x-coordinate and value per line). The interval of definition
@@ -97,7 +98,7 @@ namespace Hermes
       double point_right, value_right, derivative_right;
 
       /// A set of four coefficients a, b, c, d for an elementary cubic spline.
-      SplineCoeff* coeffs;
+      Hermes::vector<SplineCoeff> coeffs;
 
       /// Gets derivative at a point that lies in interval 'm'.
       double get_derivative_from_interval(double x_in, int m) const;

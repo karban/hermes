@@ -30,11 +30,15 @@ namespace Hermes
     {
       this->is_const = false;
       bool success = this->calculate_coeffs();
-      if(!success) throw Hermes::Exceptions::Exception("There was a problem constructing a cubic spline.");
+      // if(!success) throw Hermes::Exceptions::Exception("There was a problem constructing a cubic spline.");
     }
 
     CubicSpline::CubicSpline(double const_value) : Hermes::Hermes1DFunction<double>(const_value)
     {
+        coeffs.clear();
+
+        points.clear();
+        values.clear();
     }
 
     double CubicSpline::value(double x) const
@@ -244,7 +248,7 @@ namespace Hermes
       /* START COMPUTATION */
 
       // Initializing coefficient array.
-      coeffs = new SplineCoeff[nelem];
+      this->coeffs.clear();
 
       // Allocate matrix and rhs.
       const int n = 4 * nelem;
@@ -360,10 +364,13 @@ namespace Hermes
       // Copy the solution into the coeffs array.
       for (int i = 0; i < nelem; i++)
       {
-        coeffs[i].a = rhs[4*i + 0];
-        coeffs[i].b = rhs[4*i + 1];
-        coeffs[i].c = rhs[4*i + 2];
-        coeffs[i].d = rhs[4*i + 3];
+        SplineCoeff cfs;
+        cfs.a = rhs[4*i + 0];
+        cfs.b = rhs[4*i + 1];
+        cfs.c = rhs[4*i + 2];
+        cfs.d = rhs[4*i + 3];
+
+        coeffs.push_back(cfs);
       }
 
       // Define end point values and derivatives so that
